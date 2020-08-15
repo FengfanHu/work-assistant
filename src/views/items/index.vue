@@ -1,10 +1,10 @@
 <template>
-  <div>About</div>
+  <router-view class="pa-15"></router-view>
 </template>
 
 <script>
 export default {
-  name: 'About',
+  name: 'index',
 };
 </script>
 
