@@ -1,5 +1,5 @@
 import {
-  app, protocol, BrowserWindow, globalShortcut,
+  app, protocol, BrowserWindow, globalShortcut, Notification,
 } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
@@ -79,6 +79,13 @@ app.on('ready', async () => {
   // 注册全局快捷键
   const devtool = shortCut.devTools(win.webContents);
   if (!devtool) console.log('快捷键注册失败');
+  // 发送通知
+  const notification = new Notification({
+    title: 'Title',
+    body: 'body',
+    sound: 'ring',
+  });
+  notification.show();
 });
 
 // Exit cleanly on request from parent process in development mode.

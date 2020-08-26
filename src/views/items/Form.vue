@@ -177,11 +177,14 @@ export default {
         // 插入新的Item
         items.insert(this.item).write();
         // 消息弹窗
-        this.snackbar = true;
+        const info = { type: 'success', message: '添加成功' };
+        this.$store.commit('Notification', info);
         // 清空表单
         this.$refs.form.reset();
         // 刷新Tags
         this.$store.commit('tags/refreshTags');
+        // 跳转到Home
+        this.$router.push({ name: 'Home' });
       }
     },
     modifyItem() {
@@ -209,7 +212,8 @@ export default {
           items.updateById(this.item.id, this.item).write();
         }
         // 消息弹窗
-        this.snackbar = true;
+        const info = { type: 'success', message: '修改成功' };
+        this.$store.commit('Notification', info);
         // 清空表单
         this.$refs.form.reset();
         // 刷新Tags

@@ -1,11 +1,17 @@
 <template>
   <v-row justify="center" align="center">
-    <v-card min-width="400px" min-height="200px" class="pa-10">
+    <v-card min-width="400px" min-height="400px" class="pa-10">
       <v-card-title>{{ item.title }}</v-card-title>
       <v-card-subtitle>{{ item.type }}</v-card-subtitle>
       <v-card-text>
-        <span class="blue--text text-button">描述信息: </span>
-        {{ item.description ? item.description : '您尚未添加描述信息' }}
+        <p class="blue--text text-button">描述信息: </p>
+        <label>
+          <textarea v-model="item.description"
+                    rows="3"
+                    cols="40"
+                    disabled
+                    style="resize: none"></textarea>
+        </label>
       </v-card-text>
       <v-card-text class="py-0" v-if="time!=='-'">
         <span class="blue--text text-button">项目时间: </span>
@@ -72,6 +78,9 @@ export default {
           .get('items')
           .removeById(this.item.id)
           .write();
+        // 消息弹窗
+        const info = { type: 'success', message: '删除成功' };
+        this.$store.commit('Notification', info);
         // 刷新Tags
         this.$store.commit('tags/refreshTags');
         // 跳转

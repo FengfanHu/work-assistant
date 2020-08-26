@@ -1,16 +1,22 @@
 <template>
   <v-app>
-      <left></left>
-      <router-view class="main-wrap"></router-view>
+    <Message></Message>
+    <Music></Music>
+    <v-row>
+      <left style="height: 100vh"></left>
+      <router-view></router-view>
+    </v-row>
   </v-app>
 </template>
 
 <script>
 import Left from '@/views/layout/Left.vue';
+import Music from '@/views/layout/Music.vue';
+import Message from '@/views/layout/Message.vue';
 
 export default {
   name: 'App',
-  components: { Left },
+  components: { Message, Music, Left },
   data() {
     return {
       tags: this.$db.read().value(),
@@ -20,11 +26,4 @@ export default {
 </script>
 
 <style scoped>
-.main-wrap {
-  position: fixed;
-  left: 300px;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
 </style>

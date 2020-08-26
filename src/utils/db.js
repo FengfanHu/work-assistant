@@ -23,55 +23,10 @@ if (!db.has('tags').value()) {
   db.set('tags', [
     {
       action: 'mdi-ticket',
-      title: 'Attractions',
-      items: [
-        { title: 'List Item' },
-      ],
-    },
-    {
-      action: 'mdi-food',
-      title: 'Dining',
-      active: true,
-      items: [
-        { title: 'Breakfast & brunch' },
-        { title: 'New American' },
-        { title: 'Sushi' },
-      ],
-    },
-    {
-      action: 'mdi-school',
-      title: 'Education',
-      items: [
-        { title: 'List Item' },
-      ],
-    },
-    {
-      action: 'mdi-run',
-      title: 'Family',
-      items: [
-        { title: 'List Item' },
-      ],
-    },
-    {
-      action: 'mdi-stethoscope',
-      title: 'Health',
-      items: [
-        { title: 'List Item' },
-      ],
-    },
-    {
-      action: 'mdi-briefcase',
-      title: 'Office',
-      items: [
-        { title: 'List Item' },
-      ],
-    },
-    {
-      action: 'mdi-tag',
-      title: 'Promotions',
-      items: [
-        { title: 'List Item' },
-      ],
+      title: '您可以新增和修改分类',
+      description: '这是您对该分类的描述',
+      items: [],
+      id: '0',
     },
   ]).write();
 }

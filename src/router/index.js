@@ -9,6 +9,10 @@ import AddItem from '../views/items/Add.vue';
 import ShowItem from '../views/items/Show.vue';
 import EditItem from '../views/items/Edit.vue';
 import LayoutItem from '../views/items/index.vue';
+import Login from '../views/music/Login.vue';
+import ShowUser from '../views/music/Show.vue';
+import PlayList from '../views/music/PlayList.vue';
+import LayoutMusic from '../views/music/index.vue';
 
 Vue.use(VueRouter);
 
@@ -38,6 +42,21 @@ const routes = [
       { path: 'add', name: 'AddItem', component: AddItem },
       { path: 'show/:id', name: 'ShowItem', component: ShowItem },
       { path: 'edit/:id', name: 'EditItem', component: EditItem },
+    ],
+  },
+  {
+    path: '/music',
+    component: LayoutMusic,
+    children: [
+      { path: 'login', name: 'LoginMusic', component: Login },
+      {
+        path: 'user',
+        name: 'ShowUser',
+        component: ShowUser,
+        children: [
+          { path: 'playlist/:id', name: 'PlayList', component: PlayList },
+        ],
+      },
     ],
   },
 ];

@@ -1,12 +1,5 @@
 <template>
   <div>
-    <v-snackbar
-      color="success"
-      top
-      v-model="snackbar"
-      timeout="3000">
-      <p class="text-center mb-0">标签添加成功</p>
-    </v-snackbar>
     <v-form
       ref="form"
       v-model="valid"
@@ -112,7 +105,8 @@ export default {
           .insert(this.tag)
           .write();
         // 消息弹窗
-        this.snackbar = true;
+        const info = { type: 'success', message: '添加成功' };
+        this.$store.commit('Notification', info);
         // 清空表单
         this.$refs.form.reset();
         // 刷新Tags组件
@@ -122,6 +116,9 @@ export default {
     modifyTag() {
       const obj = this.$db.read().get('tags').getById(this.tag.id);
       obj.assign(this.tag).write();
+      // 消息弹窗
+      const info = { type: 'success', message: '修改成功' };
+      this.$store.commit('Notification', info);
       // 刷新
       this.$store.commit('tags/refreshTags');
     },

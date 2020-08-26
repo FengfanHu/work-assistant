@@ -7,6 +7,7 @@
           <v-list-item
             v-for="tag in tags"
             :key="tag.id"
+            color="warning"
             @click="changeCurrentTag(tag.id)"
           >
             <v-list-item-icon>
@@ -63,6 +64,9 @@ export default {
       const confirm = dialog.confirm('您确定要删除此分类？');
       if (confirm) {
         this.$db.read().get('tags').removeById(id).write();
+        // 消息弹窗
+        const info = { type: 'success', message: '删除成功' };
+        this.$store.commit('Notification', info);
         // 刷新Tags
         this.$store.commit('tags/refreshTags');
       }

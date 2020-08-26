@@ -1,14 +1,12 @@
 <template>
-  <v-card
-    height="100%"
-    style="position: fixed; width: 300px;"
+  <v-navigation-drawer
+    :mini-variant.sync="mini"
+    :mini-variant-width="50"
+    permanent
+    class="pl-1"
+    dark
   >
-    <v-toolbar
-      class="px-3"
-      flat
-    >
-      <v-toolbar-title>Work Assistant</v-toolbar-title>
-      <v-spacer></v-spacer>
+    <v-list-item class="ml-2">
       <!-- 选项菜单 -->
       <v-menu offset-x transition="slide-x-transition">
         <template v-slot:activator="{ on, attrs }">
@@ -16,10 +14,10 @@
             v-bind="attrs"
             v-on="on"
             icon>
-            <v-icon>mdi-dots-vertical</v-icon>
+            <v-icon>mdi-menu</v-icon>
           </v-btn>
         </template>
-        <v-list color="transparent">
+        <v-list color="transparent" dense>
           <v-list-item
             v-for="(option, index) in options"
             :key="index"
@@ -32,14 +30,23 @@
           </v-list-item>
         </v-list>
       </v-menu>
-    </v-toolbar>
+      <v-btn class="ml-2" :to="{ name: 'Home' }" text dark>
+        Fun Work
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn icon @click.stop="mini = !mini">
+        <v-icon>mdi-chevron-left</v-icon>
+      </v-btn>
+    </v-list-item>
     <v-divider></v-divider>
-    <v-list class="px-3">
+
+    <v-list class="pl-1" dense>
       <v-list-group
         v-for="tag in tags"
         :key="tag.id"
         v-model="tag.active"
         :prepend-icon="tag.action"
+        color="#2EA9DF"
         no-action
       >
         <template v-slot:activator>
@@ -54,7 +61,7 @@
           v-for="subItem in tag.items"
           :key="subItem.id"
           :to="{ name: showItem, params: { id: subItem.id } }"
-          color="success">
+          color="#FFFFFF">
           <v-list-item-content>
             <v-list-item-title
               v-text="subItem.title"></v-list-item-title>
@@ -62,7 +69,7 @@
         </v-list-item>
       </v-list-group>
     </v-list>
-  </v-card>
+  </v-navigation-drawer>
 </template>
 
 <script>
@@ -72,6 +79,7 @@ export default {
   name: 'Left',
   data() {
     return {
+      mini: false,
       options: [
         {
           title: '新增分类',
