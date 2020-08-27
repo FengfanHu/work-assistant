@@ -16,10 +16,17 @@
         <v-btn
           v-model="music"
           color="red darken-2"
-          dark fab small
+          dark fab small elevation="2"
         >
           <v-icon v-if="music">mdi-close</v-icon>
-          <v-icon v-else>mdi-music-clef-treble</v-icon>
+          <v-list-item-avatar v-else class="ma-0">
+            <!-- 因为需要激活组件才会刷新，所以class哪怕使用:class也需要激活 -->
+            <v-img v-show="currentSongCover"
+                   :src="currentSongCover"
+                   class="spin">
+            </v-img>
+            <v-icon v-show="!currentSongCover">mdi-music-clef-treble</v-icon>
+          </v-list-item-avatar>
         </v-btn>
       </template>
       <template v-if="login">
@@ -68,25 +75,29 @@
 </template>
 
 <script>
-// eslint-disable-next-line import/named
-import { CheckStatus } from '@/api/login';
-import { playSong } from '@/api/music';
+import playMethod from '@/views/music/playMethod';
+
+const { ipcRenderer } = window.require('electron');
 
 export default {
+  mixins: [playMethod],
   name: 'Music',
   data() {
     return {
-      login: false,
+      audio: {},
       music: false,
       onLine: window.navigator.onLine,
     };
   },
   computed: {
+    login() {
+      return this.$store.state.login;
+    },
     currentSong() {
       return this.$store.state.currentSongUrl;
     },
-    audio() {
-      return document.getElementById('audio');
+    currentSongCover() {
+      return this.$store.state.currentSongCover;
     },
   },
   methods: {
@@ -98,42 +109,44 @@ export default {
       console.log('播放');
       this.audio.play();
     },
-    playSong(id) {
-      return playSong({ id })
-        .then((response) => {
-          const { url } = response.data.data[0];
-          this.$store.commit('setCurrentSongId', id);
-          this.$store.commit('setCurrentSongUrl', url);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    next() {
-      const currentId = this.$store.state.currentSongId;
-      const currentIndex = this.$store.state.playList.indexOf(currentId);
-      const nextId = this.$store.state.playList[currentIndex + 1];
-      if (nextId) {
-        this.playSong(nextId);
-      } else {
-        const info = { type: 'info', message: '播放列表中没歌了 :-(' };
-        this.$store.commit('Notification', info);
-      }
-    },
   },
   created() {
-    CheckStatus()
-      .then((response) => {
-        // eslint-disable-next-line no-unused-expressions
-        response.status === 200 ? this.login = true : null;
-      }).catch(() => {
-        const info = { type: 'info', message: '您尚未登录' };
-        this.$store.commit('Notification', info);
-      });
+    if (!this.login) {
+      const info = { type: 'info', message: '您尚未登录' };
+      this.$store.commit('Notification', info);
+    }
+    ipcRenderer.on('music', (event, message) => {
+      switch (message) {
+        case 'playOrPause':
+          // eslint-disable-next-line no-unused-expressions
+          this.audio.paused ? this.play() : this.pause();
+          break;
+        case 'next':
+          this.next();
+          break;
+        default:
+          console.log('ipcRenderer-music receive wrong message');
+      }
+    });
+  },
+  // el挂载完成之后 赋值 Audio
+  mounted() {
+    this.audio = document.getElementById('audio');
   },
 };
 </script>
 
 <style scoped>
-
+  @-webkit-keyframes spin {
+    from {
+      -webkit-transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+  .spin {
+    -webkit-animation: spin 10s linear infinite;
+    animation: spin 10s linear infinite;
+  }
 </style>

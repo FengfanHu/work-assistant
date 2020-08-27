@@ -3,8 +3,7 @@
     <!-- Left -->
     <v-card
       width="250"
-      class="invisible-scrollbar"
-      style="max-height: 100vh; overflow-y: scroll"
+      style="max-height: 100vh;"
     >
       <v-list-item>
         <v-list-item-avatar>
@@ -25,7 +24,7 @@
 
       <v-divider></v-divider>
 
-      <v-list dense>
+      <v-list dense class="invisible-scrollbar" style="max-height: 90%; overflow-y: scroll">
         <v-subheader>我的歌单</v-subheader>
         <v-list-item-group color="primary">
           <v-list-item
@@ -67,7 +66,7 @@ export default {
     };
   },
   created() {
-    const uid = sessionStorage.getItem('uid');
+    const uid = localStorage.getItem('uid');
     // 获取用户信息
     getUserDetail({ uid })
       .then((response) => {

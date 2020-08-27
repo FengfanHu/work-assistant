@@ -11,9 +11,12 @@ export default new Vuex.Store({
     snackbarType: 'success',
     snackbarMessage: '',
     // 音乐
+    login: localStorage.getItem('uid'),
     currentSongId: 0,
     currentSongUrl: '',
+    currentSongCover: '',
     playList: [],
+    listDetail: [],
   },
   mutations: {
     // 发送消息
@@ -28,15 +31,24 @@ export default new Vuex.Store({
       state.snackbarMessage = '';
       state.snackbar = false;
     },
+    setLogin(state, login) {
+      state.login = login;
+    },
     setCurrentSongId(state, id) {
       state.currentSongId = id;
     },
     setCurrentSongUrl(state, url) {
       state.currentSongUrl = url;
     },
+    setCurrentSongCover(state, url) {
+      state.currentSongCover = url;
+    },
     // 加载播放列表
     setPlayList(state, list) {
       state.playList = list;
+    },
+    setListDetail(state, list) {
+      state.listDetail = list;
     },
   },
   actions: {

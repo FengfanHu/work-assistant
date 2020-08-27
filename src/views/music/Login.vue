@@ -66,7 +66,7 @@ export default {
       }).then((response) => {
         // 保存userId
         const uid = response.data.account.id;
-        sessionStorage.setItem('uid', uid);
+        localStorage.setItem('uid', uid);
         // 跳转
         this.$router.push({ name: 'ShowUser' });
         const info = { type: 'success', message: '登录成功' };

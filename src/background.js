@@ -1,14 +1,16 @@
 import {
-  app, protocol, BrowserWindow, globalShortcut, Notification,
+  app, protocol, BrowserWindow, ipcMain,
+  globalShortcut, Notification, Menu, dialog,
 } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
-import shortCut from '@/utils/shortcut'; // 引入全局快捷键
+import { createTray } from '@/utils/tray';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // 对Window的引用
 let win;
+const tray = [];
 
 // 设置协议策略
 protocol.registerSchemesAsPrivileged([
@@ -42,6 +44,9 @@ function createWindow() {
   });
 }
 
+// eslint-disable-next-line no-undef
+app.dock.setIcon(`${__static}/icon/icon-128.png`);
+
 // 所有窗口关闭之后触发
 app.on('window-all-closed', () => {
   // 对于macOS来说，使用Cmd+Q退出，其他操作系统在关闭所有窗口后直接退出程序
@@ -63,9 +68,6 @@ app.on('activate', () => {
   }
 });
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
@@ -75,17 +77,78 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString());
     }
   }
+
+  // 应用图标
+  const tray1 = createTray('icon-20.png');
+  tray1.setToolTip('FUN WORK');
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: '关于',
+      click() {
+        dialog.showMessageBox({
+          type: 'info',
+          // eslint-disable-next-line no-undef
+          icon: `${__static}/icon/icon-64.png`,
+          title: 'FunWork',
+          message: 'FunWork',
+          detail: 'Author: Frank\nGithub: https://github.com/FengfanHu/work-assistant',
+        });
+      },
+    },
+    { type: 'separator' },
+    {
+      label: '音乐',
+      type: 'submenu',
+      submenu: [
+        {
+          label: '播放/暂停',
+          click() {
+            win.webContents.send('music', 'playOrPause');
+          },
+        },
+        {
+          label: '下一首',
+          click() {
+            win.webContents.send('music', 'next');
+          },
+        },
+      ],
+    },
+  ]);
+  tray1.on('right-click', () => {
+    tray1.popUpContextMenu(contextMenu);
+  });
+  tray1.on('click', () => {
+    win.show();
+  });
+  // 播放暂停
+  const tray2 = createTray('play-16.png');
+  tray2.setTitle('播放/暂停');
+  tray2.on('click', () => {
+    win.webContents.send('music', 'playOrPause');
+  });
+  // 下一首
+  const tray3 = createTray('step-forward-16.png');
+  tray3.setTitle('下一首');
+  tray3.on('click', () => {
+    win.webContents.send('music', 'next');
+  });
+  tray.push(tray1, tray2, tray3);
+
   createWindow();
-  // 注册全局快捷键
-  const devtool = shortCut.devTools(win.webContents);
-  if (!devtool) console.log('快捷键注册失败');
+
   // 发送通知
   const notification = new Notification({
-    title: 'Title',
-    body: 'body',
+    title: 'Welcome',
+    body: '欢迎使用FUN WORK',
     sound: 'ring',
   });
   notification.show();
+
+  ipcMain.on('music-title', (event, name) => {
+    console.log(name);
+    tray1.setTitle(name);
+  });
 });
 
 // Exit cleanly on request from parent process in development mode.

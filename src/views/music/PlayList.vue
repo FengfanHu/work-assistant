@@ -1,5 +1,5 @@
 <template>
-    <div class="mx-auto" style="height: 100vh">
+    <div class="mx-auto" style="height: 100vh; max-width: 600px">
       <v-card class="mt-3" height="22%" min-height="180px">
         <v-row justify="center">
           <v-col cols="3" class="d-flex align-center">
@@ -28,6 +28,7 @@
                 </v-col>
                 <v-col cols="2">
                   <v-btn color="red" fab dark elevation="1"
+                         small
                          @click="playSong(playList.tracks[0].id)">
                     <v-icon>mdi-play</v-icon>
                   </v-btn>
@@ -37,12 +38,12 @@
           </v-col>
         </v-row>
       </v-card>
-      <v-card class="mt-3 invisible-scrollbar" max-height="75%" style="overflow-y: scroll">
+      <v-card class="mt-3 invisible-scrollbar" max-height="72%" style="overflow-y: scroll">
         <v-list-item-group color="primary">
           <v-list-item
             v-for="track in playList.tracks"
             :key="track.id"
-            @click="playSong(track.id)"
+            @click="playSong(track.id, track.al.picUrl, track.name)"
             dense>
             <v-list-item-avatar>
               <v-img :src="track.al.picUrl"></v-img>
@@ -59,9 +60,11 @@
 </template>
 
 <script>
-import { playListDetail, playSong } from '@/api/music';
+import { playListDetail } from '@/api/music';
+import playMethod from '@/views/music/playMethod';
 
 export default {
+  mixins: [playMethod],
   name: 'PlayList',
   data() {
     return {
@@ -83,22 +86,14 @@ export default {
       return playListDetail({ id: this.id })
         .then((response) => {
           this.playList = response.data.playlist;
-          const tracksId = [];
+          const list = [];
+          const listDetail = [];
           this.playList.tracks.forEach((ele) => {
-            tracksId.push(ele.id);
+            list.push(ele.id);
+            listDetail.push({ coverUrl: ele.al.picUrl, name: ele.name });
           });
-          this.$store.commit('setPlayList', tracksId);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    playSong(id) {
-      return playSong({ id })
-        .then((response) => {
-          const { url } = response.data.data[0];
-          this.$store.commit('setCurrentSongId', id);
-          this.$store.commit('setCurrentSongUrl', url);
+          this.$store.commit('setPlayList', list);
+          this.$store.commit('setListDetail', listDetail);
         })
         .catch((error) => {
           console.log(error);
