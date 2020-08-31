@@ -5,30 +5,30 @@
 </template>
 
 <script>
-import Form from '@/views/items/Form.vue';
+import Form from '@/views/items/Form.vue'
 
 export default {
   name: 'Edit',
   components: { Form },
   computed: {
-    item() {
-      const allItems = this.$store.state.tags.tags;
+    item () {
+      const allItems = this.$store.state.tags.tags
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < allItems.length; i++) {
-        const { items } = allItems[i];
+        const { items } = allItems[i]
         // eslint-disable-next-line no-plusplus
         for (let j = 0; j < items.length; j++) {
-          const item = items[j];
+          const item = items[j]
           if (item.id === this.$route.params.id) {
-            return item;
+            return item
           }
         }
       }
       // :TODO 没有找到，程序出错（一般不会出现）
-      return '';
-    },
-  },
-};
+      return ''
+    }
+  }
+}
 </script>
 
 <style scoped>

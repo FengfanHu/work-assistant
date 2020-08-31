@@ -1,35 +1,35 @@
 <template>
   <div>
     <audio id="audio"
-           :src="currentSong"
+           :src="$store.state.music.currentSongUrl"
            @ended="next"
            autoplay></audio>
     <v-speed-dial
       :disabled="!onLine"
       absolute
-      v-model="music"
+      v-model="open"
       bottom
       right
       direction="left"
     >
       <template v-slot:activator>
         <v-btn
-          v-model="music"
+          v-model="open"
           color="red darken-2"
           dark fab small elevation="2"
         >
-          <v-icon v-if="music">mdi-close</v-icon>
+          <v-icon v-if="open">mdi-close</v-icon>
           <v-list-item-avatar v-else class="ma-0">
             <!-- 因为需要激活组件才会刷新，所以class哪怕使用:class也需要激活 -->
-            <v-img v-show="currentSongCover"
-                   :src="currentSongCover"
+            <v-img v-show="$store.state.music.currentSongCover"
+                   :src="$store.state.music.currentSongCover"
                    class="spin">
             </v-img>
-            <v-icon v-show="!currentSongCover">mdi-music-clef-treble</v-icon>
+            <v-icon v-show="!$store.state.music.currentSongCover">mdi-music-clef-treble</v-icon>
           </v-list-item-avatar>
         </v-btn>
       </template>
-      <template v-if="login">
+      <template v-if="localStorage.getItem('uid')">
         <v-btn
           fab dark small
           color="red"
@@ -75,65 +75,55 @@
 </template>
 
 <script>
-import playMethod from '@/views/music/playMethod';
+import playMethod from '@/views/music/playMethod'
 
-const { ipcRenderer } = window.require('electron');
+const { ipcRenderer } = window.require('electron')
 
 export default {
   mixins: [playMethod],
   name: 'Music',
-  data() {
+  data () {
     return {
       audio: {},
-      music: false,
+      open: false,
       onLine: window.navigator.onLine,
-    };
-  },
-  computed: {
-    login() {
-      return this.$store.state.login;
-    },
-    currentSong() {
-      return this.$store.state.currentSongUrl;
-    },
-    currentSongCover() {
-      return this.$store.state.currentSongCover;
-    },
+      localStorage
+    }
   },
   methods: {
-    pause() {
-      console.log('暂停');
-      this.audio.pause();
+    pause () {
+      console.log('暂停')
+      this.audio.pause()
     },
-    play() {
-      console.log('播放');
-      this.audio.play();
-    },
+    play () {
+      console.log('播放')
+      this.audio.play()
+    }
   },
-  created() {
-    if (!this.login) {
-      const info = { type: 'info', message: '您尚未登录' };
-      this.$store.commit('Notification', info);
+  created () {
+    if (!this.localStorage.getItem('uid')) {
+      const info = { type: 'info', message: '您尚未登录' }
+      this.$store.commit('message/Notification', info)
     }
     ipcRenderer.on('music', (event, message) => {
       switch (message) {
         case 'playOrPause':
           // eslint-disable-next-line no-unused-expressions
-          this.audio.paused ? this.play() : this.pause();
-          break;
+          this.audio.paused ? this.play() : this.pause()
+          break
         case 'next':
-          this.next();
-          break;
+          this.next()
+          break
         default:
-          console.log('ipcRenderer-music receive wrong message');
+          console.log('ipcRenderer-music receive wrong message')
       }
-    });
+    })
   },
   // el挂载完成之后 赋值 Audio
-  mounted() {
-    this.audio = document.getElementById('audio');
-  },
-};
+  mounted () {
+    this.audio = document.getElementById('audio')
+  }
+}
 </script>
 
 <style scoped>

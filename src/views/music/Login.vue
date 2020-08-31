@@ -40,43 +40,43 @@
 
 <script>
 // eslint-disable-next-line import/named
-import { Login } from '@/api/login';
+import { Login } from '@/api/login'
 
 export default {
   name: 'login',
-  data() {
+  data () {
     return {
       valid: false,
       phone: '',
       password: '',
       phoneRules: [
         (v) => !!v || '请填写手机号',
-        (v) => v.length === 11 || '手机号格式不正确',
+        (v) => v.length === 11 || '手机号格式不正确'
       ],
       passwordRules: [
-        (v) => !!v || '请输入密码',
-      ],
-    };
+        (v) => !!v || '请输入密码'
+      ]
+    }
   },
   methods: {
-    login() {
+    login () {
       Login({
         phone: this.phone,
-        password: this.password,
+        password: this.password
       }).then((response) => {
         // 保存userId
-        const uid = response.data.account.id;
-        localStorage.setItem('uid', uid);
+        const uid = response.data.account.id
+        localStorage.setItem('uid', uid)
         // 跳转
-        this.$router.push({ name: 'ShowUser' });
-        const info = { type: 'success', message: '登录成功' };
-        this.$store.commit('Notification', info);
+        this.$router.push({ name: 'ShowUser' })
+        const info = { type: 'success', message: '登录成功' }
+        this.$store.commit('message/Notification', info)
       }).catch((error) => {
-        console.log(error);
-      });
-    },
-  },
-};
+        console.log(error)
+      })
+    }
+  }
+}
 </script>
 
 <style scoped>

@@ -34,45 +34,45 @@
 </template>
 
 <script>
-import dialog from '@/utils/dialog';
-import Form from '@/views/tags/Form.vue';
+import dialog from '@/utils/dialog'
+import Form from '@/views/tags/Form.vue'
 
 export default {
   name: 'Manage',
   components: { Form },
-  data() {
+  data () {
     return {
       currentTag: {
-        id: '',
-      },
-    };
+        id: ''
+      }
+    }
   },
   computed: {
-    tags() {
-      return this.$store.state.tags.tags;
+    tags () {
+      return this.$store.state.tags.tags
     },
-    items() {
-      return this.tags[this.currentTag].items;
-    },
+    items () {
+      return this.tags[this.currentTag].items
+    }
   },
   methods: {
-    changeCurrentTag(id) {
-      const chosenTag = this.$db.read().get('tags').find({ id }).value();
-      this.currentTag = chosenTag.id === this.currentTag.id ? {} : chosenTag;
+    changeCurrentTag (id) {
+      const chosenTag = this.$db.read().get('tags').find({ id }).value()
+      this.currentTag = chosenTag.id === this.currentTag.id ? {} : chosenTag
     },
-    deleteTag(id) {
-      const confirm = dialog.confirm('您确定要删除此分类？');
+    deleteTag (id) {
+      const confirm = dialog.confirm('您确定要删除此分类？')
       if (confirm) {
-        this.$db.read().get('tags').removeById(id).write();
+        this.$db.read().get('tags').removeById(id).write()
         // 消息弹窗
-        const info = { type: 'success', message: '删除成功' };
-        this.$store.commit('Notification', info);
+        const info = { type: 'success', message: '删除成功' }
+        this.$store.commit('message/Notification', info)
         // 刷新Tags
-        this.$store.commit('tags/refreshTags');
+        this.$store.commit('tags/refreshTags')
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped>

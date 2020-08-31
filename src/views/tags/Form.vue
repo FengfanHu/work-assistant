@@ -11,7 +11,6 @@
         label="TagName"
         :append-icon="tag.action"
         outlined
-        required
       ></v-text-field>
       <v-text-field
         v-model="tag.description"
@@ -75,11 +74,10 @@ export default {
   name: 'Form',
   props: {
     tag: Object,
-    type: String,
+    type: String
   },
-  data() {
+  data () {
     return {
-      snackbar: false,
       valid: false,
       lazy: false,
       icons: ['mdi-map-marker', 'mdi-train-car', 'mdi-brightness-5',
@@ -87,43 +85,43 @@ export default {
         'mdi-stethoscope', 'mdi-briefcase', 'mdi-cart'],
       nameRules: [
         (v) => !!v || '请输入分类名称',
-        (v) => (v && v.length <= 10) || '标签名必须在10字以内',
+        (v) => (v && v.length <= 10) || '标签名必须在10字以内'
       ],
       descriptionRules: [
-        (v) => ((v) ? v.length <= 10 : true) || '请精简您的描述信息哦～',
-      ],
-    };
+        (v) => ((v) ? v.length <= 10 : true) || '请精简您的描述信息哦～'
+      ]
+    }
   },
   methods: {
-    selectIcon(icon) {
-      this.tag.action = icon;
+    selectIcon (icon) {
+      this.tag.action = icon
     },
-    addTag() {
+    addTag () {
       if (this.valid) {
         this.$db.read()
           .get('tags')
           .insert(this.tag)
-          .write();
+          .write()
         // 消息弹窗
-        const info = { type: 'success', message: '添加成功' };
-        this.$store.commit('Notification', info);
+        const info = { type: 'success', message: '添加成功' }
+        this.$store.commit('message/Notification', info)
         // 清空表单
-        this.$refs.form.reset();
+        this.$refs.form.reset()
         // 刷新Tags组件
-        this.$store.commit('tags/refreshTags');
+        this.$store.commit('tags/refreshTags')
       }
     },
-    modifyTag() {
-      const obj = this.$db.read().get('tags').getById(this.tag.id);
-      obj.assign(this.tag).write();
+    modifyTag () {
+      const obj = this.$db.read().get('tags').getById(this.tag.id)
+      obj.assign(this.tag).write()
       // 消息弹窗
-      const info = { type: 'success', message: '修改成功' };
-      this.$store.commit('Notification', info);
+      const info = { type: 'success', message: '修改成功' }
+      this.$store.commit('message/Notification', info)
       // 刷新
-      this.$store.commit('tags/refreshTags');
-    },
-  },
-};
+      this.$store.commit('tags/refreshTags')
+    }
+  }
+}
 </script>
 
 <style scoped>

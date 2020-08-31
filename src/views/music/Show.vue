@@ -24,7 +24,7 @@
 
       <v-divider></v-divider>
 
-      <v-list dense class="invisible-scrollbar" style="max-height: 90%; overflow-y: scroll">
+      <v-list dense class="invisible-scrollbar py-0" style="max-height: 89%; overflow-y: scroll">
         <v-subheader>我的歌单</v-subheader>
         <v-list-item-group color="primary">
           <v-list-item
@@ -51,41 +51,41 @@
 </template>
 
 <script>
-import { getUserDetail, getPlayList } from '@/api/user';
+import { getUserDetail, getPlayList } from '@/api/user'
 
 export default {
   name: 'Show',
-  data() {
+  data () {
     return {
       user: {
         avatarUrl: '',
         nickname: 'userName',
-        birthday: '0000/0/0',
+        birthday: '0000/0/0'
       },
-      playList: [],
-    };
+      playList: []
+    }
   },
-  created() {
-    const uid = localStorage.getItem('uid');
+  created () {
+    const uid = localStorage.getItem('uid')
     // 获取用户信息
     getUserDetail({ uid })
       .then((response) => {
-        this.user = response.data.profile;
+        this.user = response.data.profile
       })
       .catch((error) => {
-        console.log(error);
-      });
+        console.log(error)
+      })
     // 获取歌单
     getPlayList({ uid })
       .then((response) => {
-        console.log('歌单加载成功');
-        this.playList = response.data.playlist;
+        console.log('歌单加载成功')
+        this.playList = response.data.playlist
       })
       .catch((error) => {
-        console.log(error);
-      });
-  },
-};
+        console.log(error)
+      })
+  }
+}
 </script>
 
 <style scoped>

@@ -10,7 +10,8 @@
                     rows="3"
                     cols="40"
                     disabled
-                    style="resize: none"></textarea>
+                    style="resize: none;"
+                    class="invisible-scrollbar"></textarea>
         </label>
       </v-card-text>
       <v-card-text class="py-0" v-if="time!=='-'">
@@ -39,58 +40,59 @@
 </template>
 
 <script>
-import dialog from '@/utils/dialog';
+import dialog from '@/utils/dialog'
 
 export default {
   name: 'Show',
-  data() {
+  data () {
     return {
-    };
+    }
   },
   computed: {
-    item() {
-      const allItems = this.$store.state.tags.tags;
+    item () {
+      const allItems = this.$store.state.tags.tags
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < allItems.length; i++) {
-        const { items } = allItems[i];
+        const { items } = allItems[i]
         // eslint-disable-next-line no-plusplus
         for (let j = 0; j < items.length; j++) {
-          const item = items[j];
+          const item = items[j]
           if (item.id === this.$route.params.id) {
-            return item;
+            return item
           }
         }
       }
-      // :TODO 没有找到，程序出错（一般不会出现）
-      return '';
+      return ''
     },
-    time() {
-      return `${this.item.time.start}-${this.item.time.end}`;
-    },
+    time () {
+      return `${this.item.time.start}-${this.item.time.end}`
+    }
   },
   methods: {
-    deleteItem() {
-      const confirm = dialog.confirm(':< 你真的要删除此项目吗？');
+    deleteItem () {
+      const confirm = dialog.confirm(':< 你真的要删除此项目吗？')
       if (confirm) {
         this.$db.read()
           .get('tags')
           .getById(this.item.parent)
           .get('items')
           .removeById(this.item.id)
-          .write();
+          .write()
         // 消息弹窗
-        const info = { type: 'success', message: '删除成功' };
-        this.$store.commit('Notification', info);
+        const info = { type: 'success', message: '删除成功' }
+        this.$store.commit('message/Notification', info)
         // 刷新Tags
-        this.$store.commit('tags/refreshTags');
+        this.$store.commit('tags/refreshTags')
         // 跳转
-        this.$router.push({ name: 'Home' });
+        this.$router.push({ name: 'Home' })
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped>
-
+.invisible-scrollbar::-webkit-scrollbar {
+  display: none;
+}
 </style>

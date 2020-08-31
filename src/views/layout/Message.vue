@@ -12,23 +12,23 @@
 export default {
   name: 'Message',
   computed: {
-    snackbarMessage() {
-      return this.$store.state.snackbarMessage;
+    snackbarMessage () {
+      return this.$store.state.message.snackbarMessage
     },
-    snackbarType() {
-      return this.$store.state.snackbarType;
+    snackbarType () {
+      return this.$store.state.message.snackbarType
     },
     snackbar: {
-      get() {
-        return this.$store.state.snackbar;
+      get () {
+        return this.$store.state.message.snackbar
       },
-      set(newValue) {
-        console.log(newValue);
-        this.$store.commit('refreshNoti');
-      },
-    },
-  },
-};
+      set (newValue) {
+        console.log(newValue)
+        this.$store.commit('message/refreshNoti')
+      }
+    }
+  }
+}
 </script>
 
 <style scoped>

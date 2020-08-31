@@ -1,12 +1,12 @@
-import service from '@/utils/axios';
+import service from '@/utils/axios'
 
-export function getBanners() {
+export function getBanners () {
   return service.request({
     method: 'GET',
-    url: '/banner',
-  });
+    url: '/banner'
+  })
 }
 
 export default {
-  getBanners,
-};
+  getBanners
+}

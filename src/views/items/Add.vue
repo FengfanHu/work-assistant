@@ -5,12 +5,12 @@
 </template>
 
 <script>
-import Form from '@/views/items/Form.vue';
+import Form from '@/views/items/Form.vue'
 
 export default {
   name: 'Add',
   components: { Form },
-  data() {
+  data () {
     return {
       item: {
         title: '',
@@ -18,13 +18,13 @@ export default {
         type: 'task',
         time: {
           start: '',
-          end: '',
+          end: ''
         },
-        parent: '',
-      },
-    };
-  },
-};
+        parent: ''
+      }
+    }
+  }
+}
 </script>
 
 <style scoped>

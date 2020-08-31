@@ -10,7 +10,7 @@
           </v-col>
           <v-col cols="8" class="px-0">
             <v-card-title class="py-2 d-flex align-center my-2">
-              <h4>{{ playList.name }}</h4>
+              <h4>{{ trimStr(playList.name, 12, 12) }}</h4>
             </v-card-title>
 
             <v-card color="#f5f5f5" class="mx-4 py-2" outlined>
@@ -20,7 +20,7 @@
                 </v-col>
                 <v-col cols="6">
                   <v-card-title class="py-0" style="font-size: 12px">
-                    歌单创建人：{{ playList.creator.nickname }}
+                    歌单创建人：{{ trimStr(playList.creator.nickname, 8, 6) }}
                   </v-card-title>
                   <v-card-text class="py-0" style="font-size: 10px">
                     该歌单共有：{{ playList.trackCount }} 首歌
@@ -39,7 +39,7 @@
         </v-row>
       </v-card>
       <v-card class="mt-3 invisible-scrollbar" max-height="72%" style="overflow-y: scroll">
-        <v-list-item-group color="primary">
+        <v-list-item-group color="primary" v-model="$store.state.music.item">
           <v-list-item
             v-for="track in playList.tracks"
             :key="track.id"
@@ -60,59 +60,51 @@
 </template>
 
 <script>
-import { playListDetail } from '@/api/music';
-import playMethod from '@/views/music/playMethod';
+import { playListDetail } from '@/api/music'
+import playMethod from '@/views/music/playMethod'
 
 export default {
   mixins: [playMethod],
   name: 'PlayList',
-  data() {
+  data () {
     return {
       playList: {
-        creator: {},
-      },
-    };
-  },
-  computed: {
-    id() {
-      return this.$route.params.id;
-    },
-    currentSongId() {
-      return this.$store.state.currentSongId;
-    },
+        creator: {}
+      }
+    }
   },
   methods: {
-    getPlayList() {
-      return playListDetail({ id: this.id })
+    getPlayList () {
+      return playListDetail({ id: this.$route.params.id })
         .then((response) => {
-          this.playList = response.data.playlist;
-          const list = [];
-          const listDetail = [];
+          this.playList = response.data.playlist
+          const list = []
+          const listDetail = []
           this.playList.tracks.forEach((ele) => {
-            list.push(ele.id);
-            listDetail.push({ coverUrl: ele.al.picUrl, name: ele.name });
-          });
-          this.$store.commit('setPlayList', list);
-          this.$store.commit('setListDetail', listDetail);
+            list.push(ele.id)
+            listDetail.push({ coverUrl: ele.al.picUrl, name: ele.name })
+          })
+          this.$store.commit('music/setPlayList', list)
+          this.$store.commit('music/setListDetail', listDetail)
         })
         .catch((error) => {
-          console.log(error);
-        });
+          console.log(error)
+        })
     },
-    init() {
-      this.getPlayList();
-    },
+    trimStr (str, max, length) {
+      return str && str.length > max ? `${str.slice(0, length)}..` : str
+    }
   },
-  created() {
-    this.init();
+  created () {
+    this.getPlayList()
   },
   // 组件的复用意味着 即使路由变换 生命周期的钩子不再被调用
   watch: {
-    $route() {
-      this.getPlayList();
-    },
-  },
-};
+    $route () {
+      this.getPlayList()
+    }
+  }
+}
 </script>
 
 <style scoped>

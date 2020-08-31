@@ -5,23 +5,22 @@
 </template>
 
 <script>
-import Form from '@/views/tags/Form.vue';
+import Form from '@/views/tags/Form.vue'
 
 export default {
   name: 'Add',
   components: { Form },
-  data() {
+  data () {
     return {
-      snackbar: false,
       tag: {
         action: 'mdi-emoticon',
         title: '',
         items: [],
-        description: '',
-      },
-    };
-  },
-};
+        description: ''
+      }
+    }
+  }
+}
 </script>
 
 <style scoped>

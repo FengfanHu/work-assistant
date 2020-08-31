@@ -140,9 +140,9 @@ export default {
   name: 'Form',
   props: {
     item: Object,
-    type: String,
+    type: String
   },
-  data() {
+  data () {
     return {
       valid: false,
       startMenu: false,
@@ -150,44 +150,44 @@ export default {
       picker: '',
       nameRules: [
         (v) => !!v || '请输入项目名称',
-        (v) => (v && v.length <= 10) || '项目名称超过限制字数',
+        (v) => (v && v.length <= 10) || '项目名称超过限制字数'
       ],
       selectRules: [
-        (v) => !!v || '您必须选择一个分类',
+        (v) => !!v || '您必须选择一个分类'
       ],
       descriptionRules: [
-        (v) => ((v) ? v.length <= 120 : true) || '项目描述超过限制字数',
+        (v) => ((v) ? v.length <= 120 : true) || '项目描述超过限制字数'
       ],
       lazy: false,
       tags: this.$store.state.tags.tags,
-      originTag: this.item.parent,
-    };
+      originTag: this.item.parent
+    }
   },
   methods: {
-    reset() {
-      this.$refs.form.reset();
+    reset () {
+      this.$refs.form.reset()
     },
-    addItem() {
+    addItem () {
       if (this.valid) {
         // 获取对应的Tag的Items
         const items = this.$db.read()
           .get('tags')
           .getById(this.item.parent)
-          .get('items');
+          .get('items')
         // 插入新的Item
-        items.insert(this.item).write();
+        items.insert(this.item).write()
         // 消息弹窗
-        const info = { type: 'success', message: '添加成功' };
-        this.$store.commit('Notification', info);
+        const info = { type: 'success', message: '添加成功' }
+        this.$store.commit('message/Notification', info)
         // 清空表单
-        this.$refs.form.reset();
+        this.$refs.form.reset()
         // 刷新Tags
-        this.$store.commit('tags/refreshTags');
+        this.$store.commit('tags/refreshTags')
         // 跳转到Home
-        this.$router.push({ name: 'Home' });
+        this.$router.push({ name: 'Home' })
       }
     },
-    modifyItem() {
+    modifyItem () {
       if (this.valid) {
         if (this.originTag !== this.item.parent) {
           // 若分类改变则先删除
@@ -196,34 +196,34 @@ export default {
             .getById(this.originTag)
             .get('items')
             .removeById(this.item.id)
-            .write();
+            .write()
           // 获取最新Tag的Items
           const items = this.$db.read()
             .get('tags')
             .getById(this.item.parent)
-            .get('items');
+            .get('items')
           // 插入新的Item
-          items.insert(this.item).write();
+          items.insert(this.item).write()
         } else {
           const items = this.$db.read()
             .get('tags')
             .getById(this.originTag)
-            .get('items');
-          items.updateById(this.item.id, this.item).write();
+            .get('items')
+          items.updateById(this.item.id, this.item).write()
         }
         // 消息弹窗
-        const info = { type: 'success', message: '修改成功' };
-        this.$store.commit('Notification', info);
+        const info = { type: 'success', message: '修改成功' }
+        this.$store.commit('message/Notification', info)
         // 清空表单
-        this.$refs.form.reset();
+        this.$refs.form.reset()
         // 刷新Tags
-        this.$store.commit('tags/refreshTags');
+        this.$store.commit('tags/refreshTags')
         // 回退
-        this.$router.back();
+        this.$router.back()
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped>

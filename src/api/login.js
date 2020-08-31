@@ -1,16 +1,16 @@
-import service from '@/utils/axios';
+import service from '@/utils/axios'
 
-export function Login(params) {
+export function Login (params) {
   return service.request({
     method: 'GET',
     url: '/login/cellphone',
-    params,
-  });
+    params
+  })
 }
 
-export function CheckStatus() {
+export function CheckStatus () {
   return service.request({
     method: 'GET',
-    url: '/login/status',
-  });
+    url: '/login/status'
+  })
 }

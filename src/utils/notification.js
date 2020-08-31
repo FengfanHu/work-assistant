@@ -1,12 +1,12 @@
-const { Notification } = window.require('electron').remote;
+const { Notification } = window.require('electron').remote
 
-function createNotification(title, body, sound) {
+function createNotification (title, body, sound) {
   return new Notification(title, {
     body,
-    sound,
-  });
+    sound
+  })
 }
 
 export default {
-  createNotification,
-};
+  createNotification
+}
