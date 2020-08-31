@@ -1,8 +1,9 @@
 # work-assistant
 
 PC端个人学习工具，Markdown笔记记录、计划记录、网易云听歌
+You should build your own neteasecloudmusic server online to use it, since it's not included in the project.
 
-集成
+### Using
 [网易云API](https://binaryify.github.io/NeteaseCloudMusicApi/#/?id=neteasecloudmusicapi)
 、
 [Mavon-edit](https://github.com/hinesboy/mavonEditor)
