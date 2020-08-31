@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 
-const BASEURL = process.env.NODE_ENV === 'production' ? 'http://116.62.47.177:3000' : '/api'
+const BASEURL = process.env.NODE_ENV === 'production' ? 'your own neteasemusic server' : '/api'
 
 const service = axios.create({
   baseURL: BASEURL,
